@@ -15,6 +15,29 @@ pub struct Skill {
 #[derive(Deserialize, Debug)]
 #[serde(deny_unknown_fields)]
 #[allow(dead_code)]
+pub struct Share {
+    #[serde(rename = "Date")]
+    pub date: String,
+
+    #[serde(rename = "ShareLink")]
+    pub share_link: String,
+
+    #[serde(rename = "ShareCommentary")]
+    pub share_commentary: String,
+
+    #[serde(rename = "SharedUrl")]
+    pub shared_url: String,
+
+    #[serde(rename = "MediaUrl")]
+    pub media_url: String,
+
+    #[serde(rename = "Visibility")]
+    pub visibility: String,
+}
+
+#[derive(Deserialize, Debug)]
+#[serde(deny_unknown_fields)]
+#[allow(dead_code)]
 pub struct Contact {
     #[serde(rename = "Source")]
     pub source: String,
@@ -84,6 +107,18 @@ pub fn read_skills_file(path: &Path) -> Result<Vec<Skill>, Box<dyn Error>> {
     let mut rdr = csv::Reader::from_reader(fh);
     for result in rdr.deserialize() {
         let record: Skill = result?;
+        records.push(record);
+    }
+    Ok(records)
+}
+
+pub fn read_shares_file(path: &Path) -> Result<Vec<Share>, Box<dyn Error>> {
+    let filepath = path.join("Shares.csv");
+    let mut records: Vec<Share> = vec![];
+    let fh = File::open(&filepath)?;
+    let mut rdr = csv::Reader::from_reader(fh);
+    for result in rdr.deserialize() {
+        let record: Share = result?;
         records.push(record);
     }
     Ok(records)
