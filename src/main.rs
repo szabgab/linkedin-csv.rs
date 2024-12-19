@@ -7,7 +7,6 @@ fn main() {
         std::process::exit(1);
     }
     let path = &args[1];
-    println!("{:?}", path);
 
     let contacts = read_contacts_file(path).unwrap();
 

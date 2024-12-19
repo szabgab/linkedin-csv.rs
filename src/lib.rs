@@ -6,7 +6,7 @@ use serde::Deserialize;
 #[derive(Deserialize, Debug)]
 #[serde(deny_unknown_fields)]
 #[allow(dead_code)]
-pub struct Record {
+pub struct Contact {
     #[serde(rename = "Source")]
     pub source: String,
 
@@ -56,16 +56,15 @@ pub struct Record {
     pub profiles: String,
 }
 
-pub fn read_contacts_file(dir_path: &str) -> Result<Vec<Record>, Box<dyn Error>> {
+pub fn read_contacts_file(dir_path: &str) -> Result<Vec<Contact>, Box<dyn Error>> {
     let path = std::path::Path::new(dir_path);
-    println!("{:?}", path);
     let filepath = path.join("Contacts.csv");
-    let mut records: Vec<Record> = vec![];
+    let mut records: Vec<Contact> = vec![];
     match File::open(&filepath) {
         Ok(file) => {
             let mut rdr = csv::Reader::from_reader(file);
             for result in rdr.deserialize() {
-                let record: Record = result?;
+                let record: Contact = result?;
                 records.push(record);
             }
         }
