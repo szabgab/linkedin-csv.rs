@@ -1,5 +1,6 @@
 use std::error::Error;
 use std::fs::File;
+use std::path::Path;
 
 use serde::Deserialize;
 
@@ -56,19 +57,14 @@ pub struct Contact {
     pub profiles: String,
 }
 
-pub fn read_contacts_file(dir_path: &str) -> Result<Vec<Contact>, Box<dyn Error>> {
-    let path = std::path::Path::new(dir_path);
+pub fn read_contacts_file(path: &Path) -> Result<Vec<Contact>, Box<dyn Error>> {
     let filepath = path.join("Contacts.csv");
     let mut records: Vec<Contact> = vec![];
-    match File::open(&filepath) {
-        Ok(file) => {
-            let mut rdr = csv::Reader::from_reader(file);
-            for result in rdr.deserialize() {
-                let record: Contact = result?;
-                records.push(record);
-            }
-        }
-        Err(error) => panic!("Error opening file {:?}: {}", filepath, error),
+    let fh = File::open(&filepath)?;
+    let mut rdr = csv::Reader::from_reader(fh);
+    for result in rdr.deserialize() {
+        let record: Contact = result?;
+        records.push(record);
     }
     Ok(records)
 }
