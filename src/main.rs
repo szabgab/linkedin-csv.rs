@@ -1,4 +1,4 @@
-use linkedin_csv::read_contacts_file;
+use linkedin_csv::{read_contacts_file, read_skills_file};
 
 fn main() {
     let args = std::env::args().collect::<Vec<String>>();
@@ -16,6 +16,18 @@ fn main() {
         Ok(contacts) => {
             for contact in contacts {
                 println!("{:?}", contact);
+            }
+        }
+        Err(err) => {
+            eprintln!("Could not read contacts: {err}");
+            std::process::exit(1);
+        }
+    }
+
+    match read_skills_file(path) {
+        Ok(skills) => {
+            for skill in skills {
+                println!("{:?}", skill);
             }
         }
         Err(err) => {

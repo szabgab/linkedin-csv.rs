@@ -7,6 +7,14 @@ use serde::Deserialize;
 #[derive(Deserialize, Debug)]
 #[serde(deny_unknown_fields)]
 #[allow(dead_code)]
+pub struct Skill {
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Deserialize, Debug)]
+#[serde(deny_unknown_fields)]
+#[allow(dead_code)]
 pub struct Contact {
     #[serde(rename = "Source")]
     pub source: String,
@@ -64,6 +72,18 @@ pub fn read_contacts_file(path: &Path) -> Result<Vec<Contact>, Box<dyn Error>> {
     let mut rdr = csv::Reader::from_reader(fh);
     for result in rdr.deserialize() {
         let record: Contact = result?;
+        records.push(record);
+    }
+    Ok(records)
+}
+
+pub fn read_skills_file(path: &Path) -> Result<Vec<Skill>, Box<dyn Error>> {
+    let filepath = path.join("Skills.csv");
+    let mut records: Vec<Skill> = vec![];
+    let fh = File::open(&filepath)?;
+    let mut rdr = csv::Reader::from_reader(fh);
+    for result in rdr.deserialize() {
+        let record: Skill = result?;
         records.push(record);
     }
     Ok(records)
