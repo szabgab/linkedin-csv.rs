@@ -2,6 +2,8 @@
 
 This crate defines structs that can be used to parse the CSV files exported from LinkedIn.
 
+See the `main.rs` file on how to use the functions.
+
 
 To export the data from Google:
 
