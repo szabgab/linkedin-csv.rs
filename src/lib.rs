@@ -8,6 +8,17 @@ use serde::Deserialize;
 #[derive(Deserialize, Debug)]
 #[serde(deny_unknown_fields)]
 #[allow(dead_code)]
+pub struct SearchQuery {
+    #[serde(rename = "Time")]
+    pub time: String,
+
+    #[serde(rename = "Search Query")]
+    pub search_query: String,
+}
+
+#[derive(Deserialize, Debug)]
+#[serde(deny_unknown_fields)]
+#[allow(dead_code)]
 pub struct Message {
     #[serde(rename = "CONVERSATION ID")]
     pub conversation_id: String,
@@ -257,6 +268,18 @@ pub fn read_connections_file(path: &Path) -> Result<Vec<Connection>, Box<dyn Err
     let mut rdr = csv::Reader::from_reader(br);
     for result in rdr.deserialize() {
         let record: Connection = result?;
+        records.push(record);
+    }
+    Ok(records)
+}
+
+pub fn read_search_queries_file(path: &Path) -> Result<Vec<SearchQuery>, Box<dyn Error>> {
+    let filepath = path.join("SearchQueries.csv");
+    let mut records: Vec<SearchQuery> = vec![];
+    let fh = File::open(&filepath)?;
+    let mut rdr = csv::Reader::from_reader(fh);
+    for result in rdr.deserialize() {
+        let record: SearchQuery = result?;
         records.push(record);
     }
     Ok(records)
