@@ -1,6 +1,7 @@
 use linkedin_csv::{
     read_connections_file, read_contacts_file, read_invitations_file, read_messages_file,
-    read_search_queries_file, read_shares_file, read_skills_file, read_votes_file,
+    read_saved_items_file, read_search_queries_file, read_shares_file, read_skills_file,
+    read_votes_file,
 };
 
 macro_rules! call_function {
@@ -40,9 +41,10 @@ fn main() {
         "contacts" => call_function!(read_contacts_file, path, "Contacts.csv"),
         "invitations" => call_function!(read_invitations_file, path, "Invitations.csv"),
         "messages" => call_function!(read_messages_file, path, "messages.csv"),
+        "saved_items" => call_function!(read_saved_items_file, path, "Saved_Items.csv"),
         "search_queries" => call_function!(read_search_queries_file, path, "SearchQueries.csv"),
-        "skills" => call_function!(read_skills_file, path, "Skills.csv"),
         "shares" => call_function!(read_shares_file, path, "Shares.csv"),
+        "skills" => call_function!(read_skills_file, path, "Skills.csv"),
         "votes" => call_function!(read_votes_file, path, "Votes.csv"),
         _ => {
             eprintln!("The provided table: {table} is not supported");

@@ -8,6 +8,17 @@ use serde::Deserialize;
 #[derive(Deserialize, Debug)]
 #[serde(deny_unknown_fields)]
 #[allow(dead_code)]
+pub struct SavedItems {
+    #[serde(rename = "savedItem")]
+    pub saved_item: String,
+
+    #[serde(rename = "createdTime")]
+    pub created_time: String,
+}
+
+#[derive(Deserialize, Debug)]
+#[serde(deny_unknown_fields)]
+#[allow(dead_code)]
 pub struct Vote {
     #[serde(rename = "Date")]
     pub date: String,
@@ -226,6 +237,7 @@ read_file!(read_shares_file, Share, "Shares.csv");
 read_file!(read_invitations_file, Invitation, "Invitations.csv");
 read_file!(read_messages_file, Message, "messages.csv");
 read_file!(read_votes_file, Vote, "Votes.csv");
+read_file!(read_saved_items_file, SavedItems, "Saved_Items.csv");
 
 pub fn read_connections_file(path: &Path) -> Result<Vec<Connection>, Box<dyn Error>> {
     let filepath = path.join("Connections.csv");
