@@ -3,6 +3,22 @@ use linkedin_csv::{
     read_search_queries_file, read_shares_file, read_skills_file, read_votes_file,
 };
 
+macro_rules! call_function {
+    ($name:ident, $path:ident, $file:expr) => {
+        match $name($path) {
+            Ok(entries) => {
+                for entry in entries {
+                    println!("{:?}", entry);
+                }
+            }
+            Err(err) => {
+                eprintln!("Could not read $file: {err}");
+                std::process::exit(1);
+            }
+        }
+    };
+}
+
 fn main() {
     let args = std::env::args().collect::<Vec<String>>();
     if args.len() != 3 {
@@ -20,94 +36,14 @@ fn main() {
     }
 
     match table.as_str() {
-        "connections" => match read_connections_file(path) {
-            Ok(entries) => {
-                for entry in entries {
-                    println!("{:?}", entry);
-                }
-            }
-            Err(err) => {
-                eprintln!("Could not read Contacts.csv: {err}");
-                std::process::exit(1);
-            }
-        },
-        "contacts" => match read_contacts_file(path) {
-            Ok(entries) => {
-                for entry in entries {
-                    println!("{:?}", entry);
-                }
-            }
-            Err(err) => {
-                eprintln!("Could not read Contacts.csv: {err}");
-                std::process::exit(1);
-            }
-        },
-        "invitations" => match read_invitations_file(path) {
-            Ok(entries) => {
-                for entry in entries {
-                    println!("{:?}", entry);
-                }
-            }
-            Err(err) => {
-                eprintln!("Could not read Invitations.csv: {err}");
-                std::process::exit(1);
-            }
-        },
-        "messages" => match read_messages_file(path) {
-            Ok(entries) => {
-                for entry in entries {
-                    println!("{:?}", entry);
-                }
-            }
-            Err(err) => {
-                eprintln!("Could not read messages.csv: {err}");
-                std::process::exit(1);
-            }
-        },
-        "search_queries" => match read_search_queries_file(path) {
-            Ok(entries) => {
-                for entry in entries {
-                    println!("{:?}", entry);
-                }
-            }
-            Err(err) => {
-                eprintln!("Could not read SearchQueries.csv: {err}");
-                std::process::exit(1);
-            }
-        },
-        "skills" => match read_skills_file(path) {
-            Ok(entries) => {
-                for entry in entries {
-                    println!("{:?}", entry);
-                }
-            }
-            Err(err) => {
-                eprintln!("Could not read Skills.csv: {err}");
-                std::process::exit(1);
-            }
-        },
-        "shares" => match read_shares_file(path) {
-            Ok(entries) => {
-                for entry in entries {
-                    println!("{:?}", entry);
-                }
-            }
-            Err(err) => {
-                eprintln!("Could not read Shares.csv: {err}");
-                std::process::exit(1);
-            }
-        },
-        "votes" => match read_votes_file(path) {
-            Ok(entries) => {
-                for entry in entries {
-                    println!("{:?}", entry);
-                }
-            }
-            Err(err) => {
-                eprintln!("Could not read Voters.csv: {err}");
-                std::process::exit(1);
-            }
-        },
+        "connections" => call_function!(read_connections_file, path, "Connections.csv"),
+        "contacts" => call_function!(read_contacts_file, path, "Contacts.csv"),
+        "invitations" => call_function!(read_invitations_file, path, "Invitations.csv"),
+        "messages" => call_function!(read_messages_file, path, "messages.csv"),
+        "search_queries" => call_function!(read_search_queries_file, path, "SearchQueries.csv"),
+        "skills" => call_function!(read_skills_file, path, "Skills.csv"),
+        "shares" => call_function!(read_shares_file, path, "Shares.csv"),
+        "votes" => call_function!(read_votes_file, path, "Votes.csv"),
         _ => {
             eprintln!("The provided table: {table} is not supported");
             std::process::exit(1);
