@@ -18,3 +18,6 @@ unzip ~/Downloads/Complete_LinkedInDataExport_04-04-2023.zip
 ```
 
 Warning: right now each field is `pub` which might change.
+
+This project is not endorsed by or associated with Microsoft or LinkedIn.
+It is an independent project trying to deal with data from LinkedIn.
