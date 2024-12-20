@@ -1,10 +1,13 @@
-use linkedin_csv::{read_contacts_file, read_invitations_file, read_shares_file, read_skills_file};
+use linkedin_csv::{
+    read_contacts_file, read_invitations_file, read_messages_file, read_shares_file,
+    read_skills_file,
+};
 
 fn main() {
     let args = std::env::args().collect::<Vec<String>>();
     if args.len() != 3 {
         eprintln!(
-            "Usage: {} [contacts|invitations|shares|skills] PATH_TO_LINKEDIN_FOLDER",
+            "Usage: {} [contacts|invitations|messages|shares|skills] PATH_TO_LINKEDIN_FOLDER",
             args[0]
         );
         std::process::exit(1);
@@ -36,6 +39,17 @@ fn main() {
             }
             Err(err) => {
                 eprintln!("Could not read Invitations.csv: {err}");
+                std::process::exit(1);
+            }
+        },
+        "messages" => match read_messages_file(path) {
+            Ok(entries) => {
+                for entry in entries {
+                    println!("{:?}", entry);
+                }
+            }
+            Err(err) => {
+                eprintln!("Could not read messages.csv: {err}");
                 std::process::exit(1);
             }
         },

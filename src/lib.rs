@@ -7,6 +7,44 @@ use serde::Deserialize;
 #[derive(Deserialize, Debug)]
 #[serde(deny_unknown_fields)]
 #[allow(dead_code)]
+pub struct Message {
+    #[serde(rename = "CONVERSATION ID")]
+    pub conversation_id: String,
+
+    #[serde(rename = "CONVERSATION TITLE")]
+    pub conversation_title: String,
+
+    #[serde(rename = "FROM")]
+    pub from: String,
+
+    #[serde(rename = "SENDER PROFILE URL")]
+    pub sender_profile_url: String,
+
+    #[serde(rename = "TO")]
+    pub to: String,
+
+    #[serde(rename = "RECIPIENT PROFILE URLS")]
+    pub recipient_profile_urls: String,
+
+    #[serde(rename = "DATE")]
+    pub date: String,
+
+    #[serde(rename = "SUBJECT")]
+    pub subject: String,
+
+    #[serde(rename = "CONTENT")]
+    pub content: String,
+
+    #[serde(rename = "FOLDER")]
+    pub folder: String,
+
+    #[serde(rename = "IS MESSAGE DRAFT")]
+    pub is_message_draft: String,
+}
+
+#[derive(Deserialize, Debug)]
+#[serde(deny_unknown_fields)]
+#[allow(dead_code)]
 pub struct Invitation {
     #[serde(rename = "From")]
     pub from: String,
@@ -157,6 +195,18 @@ pub fn read_invitations_file(path: &Path) -> Result<Vec<Invitation>, Box<dyn Err
     let mut rdr = csv::Reader::from_reader(fh);
     for result in rdr.deserialize() {
         let record: Invitation = result?;
+        records.push(record);
+    }
+    Ok(records)
+}
+
+pub fn read_messages_file(path: &Path) -> Result<Vec<Message>, Box<dyn Error>> {
+    let filepath = path.join("messages.csv");
+    let mut records: Vec<Message> = vec![];
+    let fh = File::open(&filepath)?;
+    let mut rdr = csv::Reader::from_reader(fh);
+    for result in rdr.deserialize() {
+        let record: Message = result?;
         records.push(record);
     }
     Ok(records)
