@@ -7,6 +7,32 @@ use serde::Deserialize;
 #[derive(Deserialize, Debug)]
 #[serde(deny_unknown_fields)]
 #[allow(dead_code)]
+pub struct Invitation {
+    #[serde(rename = "From")]
+    pub from: String,
+
+    #[serde(rename = "To")]
+    pub to: String,
+
+    #[serde(rename = "Sent At")]
+    pub sent_at: String,
+
+    #[serde(rename = "Message")]
+    pub message: String,
+
+    #[serde(rename = "Direction")]
+    pub direction: String,
+
+    #[serde(rename = "inviterProfileUrl")]
+    pub inviter_profile_url: String,
+
+    #[serde(rename = "inviteeProfileUrl")]
+    pub invitee_profile_url: String,
+}
+
+#[derive(Deserialize, Debug)]
+#[serde(deny_unknown_fields)]
+#[allow(dead_code)]
 pub struct Skill {
     #[serde(rename = "Name")]
     pub name: String,
@@ -119,6 +145,18 @@ pub fn read_shares_file(path: &Path) -> Result<Vec<Share>, Box<dyn Error>> {
     let mut rdr = csv::Reader::from_reader(fh);
     for result in rdr.deserialize() {
         let record: Share = result?;
+        records.push(record);
+    }
+    Ok(records)
+}
+
+pub fn read_invitations_file(path: &Path) -> Result<Vec<Invitation>, Box<dyn Error>> {
+    let filepath = path.join("Invitations.csv");
+    let mut records: Vec<Invitation> = vec![];
+    let fh = File::open(&filepath)?;
+    let mut rdr = csv::Reader::from_reader(fh);
+    for result in rdr.deserialize() {
+        let record: Invitation = result?;
         records.push(record);
     }
     Ok(records)
