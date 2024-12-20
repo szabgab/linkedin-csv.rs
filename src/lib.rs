@@ -190,65 +190,27 @@ pub struct Contact {
     pub profiles: String,
 }
 
-pub fn read_contacts_file(path: &Path) -> Result<Vec<Contact>, Box<dyn Error>> {
-    let filepath = path.join("Contacts.csv");
-    let mut records: Vec<Contact> = vec![];
-    let fh = File::open(&filepath)?;
-    let mut rdr = csv::Reader::from_reader(fh);
-    for result in rdr.deserialize() {
-        let record: Contact = result?;
-        records.push(record);
-    }
-    Ok(records)
+macro_rules! read_file {
+    ($name:ident, $struct:ty, $file:expr) => {
+        pub fn $name(path: &Path) -> Result<Vec<$struct>, Box<dyn Error>> {
+            let filepath = path.join($file);
+            let mut records: Vec<$struct> = vec![];
+            let fh = File::open(&filepath)?;
+            let mut rdr = csv::Reader::from_reader(fh);
+            for result in rdr.deserialize() {
+                let record: $struct = result?;
+                records.push(record);
+            }
+            Ok(records)
+        }
+    };
 }
 
-pub fn read_skills_file(path: &Path) -> Result<Vec<Skill>, Box<dyn Error>> {
-    let filepath = path.join("Skills.csv");
-    let mut records: Vec<Skill> = vec![];
-    let fh = File::open(&filepath)?;
-    let mut rdr = csv::Reader::from_reader(fh);
-    for result in rdr.deserialize() {
-        let record: Skill = result?;
-        records.push(record);
-    }
-    Ok(records)
-}
-
-pub fn read_shares_file(path: &Path) -> Result<Vec<Share>, Box<dyn Error>> {
-    let filepath = path.join("Shares.csv");
-    let mut records: Vec<Share> = vec![];
-    let fh = File::open(&filepath)?;
-    let mut rdr = csv::Reader::from_reader(fh);
-    for result in rdr.deserialize() {
-        let record: Share = result?;
-        records.push(record);
-    }
-    Ok(records)
-}
-
-pub fn read_invitations_file(path: &Path) -> Result<Vec<Invitation>, Box<dyn Error>> {
-    let filepath = path.join("Invitations.csv");
-    let mut records: Vec<Invitation> = vec![];
-    let fh = File::open(&filepath)?;
-    let mut rdr = csv::Reader::from_reader(fh);
-    for result in rdr.deserialize() {
-        let record: Invitation = result?;
-        records.push(record);
-    }
-    Ok(records)
-}
-
-pub fn read_messages_file(path: &Path) -> Result<Vec<Message>, Box<dyn Error>> {
-    let filepath = path.join("messages.csv");
-    let mut records: Vec<Message> = vec![];
-    let fh = File::open(&filepath)?;
-    let mut rdr = csv::Reader::from_reader(fh);
-    for result in rdr.deserialize() {
-        let record: Message = result?;
-        records.push(record);
-    }
-    Ok(records)
-}
+read_file!(read_contacts_file, Contact, "Contacts.csv");
+read_file!(read_skills_file, Skill, "Skills.csv");
+read_file!(read_shares_file, Share, "Shares.csv");
+read_file!(read_invitations_file, Invitation, "Invitations.csv");
+read_file!(read_messages_file, Message, "messages.csv");
 
 pub fn read_connections_file(path: &Path) -> Result<Vec<Connection>, Box<dyn Error>> {
     let filepath = path.join("Connections.csv");
