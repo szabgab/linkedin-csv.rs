@@ -21,9 +21,9 @@ fn main() {
 
     match table.as_str() {
         "contacts" => match read_contacts_file(path) {
-            Ok(contacts) => {
-                for contact in contacts {
-                    println!("{:?}", contact);
+            Ok(entries) => {
+                for entry in entries {
+                    println!("{:?}", entry);
                 }
             }
             Err(err) => {
@@ -54,9 +54,9 @@ fn main() {
             }
         },
         "skills" => match read_skills_file(path) {
-            Ok(skills) => {
-                for skill in skills {
-                    println!("{:?}", skill);
+            Ok(entries) => {
+                for entry in entries {
+                    println!("{:?}", entry);
                 }
             }
             Err(err) => {
