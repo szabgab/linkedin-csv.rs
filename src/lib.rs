@@ -1,5 +1,6 @@
 use std::error::Error;
 use std::fs::File;
+use std::io::BufRead;
 use std::path::Path;
 
 use serde::Deserialize;
@@ -40,6 +41,32 @@ pub struct Message {
 
     #[serde(rename = "IS MESSAGE DRAFT")]
     pub is_message_draft: String,
+}
+
+#[derive(Deserialize, Debug)]
+#[serde(deny_unknown_fields)]
+#[allow(dead_code)]
+pub struct Connection {
+    #[serde(rename = "First Name")]
+    pub first_name: String,
+
+    #[serde(rename = "Last Name")]
+    pub last_name: String,
+
+    #[serde(rename = "URL")]
+    pub url: String,
+
+    #[serde(rename = "Email Address")]
+    pub email_address: String,
+
+    #[serde(rename = "Company")]
+    pub company: String,
+
+    #[serde(rename = "Position")]
+    pub position: String,
+
+    #[serde(rename = "Connected On")]
+    pub connected_on: String,
 }
 
 #[derive(Deserialize, Debug)]
@@ -207,6 +234,29 @@ pub fn read_messages_file(path: &Path) -> Result<Vec<Message>, Box<dyn Error>> {
     let mut rdr = csv::Reader::from_reader(fh);
     for result in rdr.deserialize() {
         let record: Message = result?;
+        records.push(record);
+    }
+    Ok(records)
+}
+
+pub fn read_connections_file(path: &Path) -> Result<Vec<Connection>, Box<dyn Error>> {
+    let filepath = path.join("Connections.csv");
+    let mut records: Vec<Connection> = vec![];
+    let fh = File::open(&filepath)?;
+    let mut br = std::io::BufReader::new(&fh);
+
+    // This file has the following message at the top, we need to skip that.
+    // Notes:
+    // "When exporting your connection data, you may notice that some of the email addresses are missing. You will only see email addresses for connections who have allowed their connections to see or download their email address using this setting https://www.linkedin.com/psettings/privacy/email. You can learn more here https://www.linkedin.com/help/linkedin/answer/261"
+
+    for _ in 0..3 {
+        br.skip_until(b'\n')
+            .expect("expecting Notes before the header");
+    }
+
+    let mut rdr = csv::Reader::from_reader(br);
+    for result in rdr.deserialize() {
+        let record: Connection = result?;
         records.push(record);
     }
     Ok(records)

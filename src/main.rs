@@ -1,6 +1,6 @@
 use linkedin_csv::{
-    read_contacts_file, read_invitations_file, read_messages_file, read_shares_file,
-    read_skills_file,
+    read_connections_file, read_contacts_file, read_invitations_file, read_messages_file,
+    read_shares_file, read_skills_file,
 };
 
 fn main() {
@@ -20,6 +20,17 @@ fn main() {
     }
 
     match table.as_str() {
+        "connections" => match read_connections_file(path) {
+            Ok(entries) => {
+                for entry in entries {
+                    println!("{:?}", entry);
+                }
+            }
+            Err(err) => {
+                eprintln!("Could not read Contacts.csv: {err}");
+                std::process::exit(1);
+            }
+        },
         "contacts" => match read_contacts_file(path) {
             Ok(entries) => {
                 for entry in entries {
