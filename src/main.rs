@@ -5,6 +5,21 @@ use linkedin_csv::{
     read_votes_file,
 };
 
+const TABLES: [&str; 12] = [
+    "ads_clicked",
+    "ad_targeting",
+    "connections",
+    "contacts",
+    "invitations",
+    "messages",
+    "recommendations_received",
+    "saved_items",
+    "search_queries",
+    "shares",
+    "skills",
+    "votes",
+];
+
 macro_rules! call_function {
     ($name:ident, $path:ident, $file:expr) => {
         match $name($path) {
@@ -14,7 +29,7 @@ macro_rules! call_function {
                 }
             }
             Err(err) => {
-                eprintln!("Could not read $file: {err}");
+                eprintln!("Could not read '{}': {err}", $file);
                 std::process::exit(1);
             }
         }
@@ -24,10 +39,8 @@ macro_rules! call_function {
 fn main() {
     let args = std::env::args().collect::<Vec<String>>();
     if args.len() != 3 {
-        eprintln!(
-            "Usage: {} [ads_clicked|ad_targeting|connections|contacts|invitations|messages|search_queries|shares|skills|votes] PATH_TO_LINKEDIN_FOLDER",
-            args[0]
-        );
+        let params = TABLES.join("|");
+        eprintln!("Usage: {} [{params}] PATH_TO_LINKEDIN_FOLDER", args[0]);
         std::process::exit(1);
     }
     let table = &args[1];
@@ -37,7 +50,11 @@ fn main() {
         std::process::exit(1);
     }
 
-    match table.as_str() {
+    read_and_print_table(table, path);
+}
+
+fn read_and_print_table(table: &str, path: &std::path::Path) {
+    match table {
         "ads_clicked" => call_function!(read_ads_clicked_file, path, "Ads Clicked.csv"),
         "ad_targeting" => call_function!(read_ad_targeting_file, path, "Ad_Targeting.csv"),
         "connections" => call_function!(read_connections_file, path, "Connections.csv"),
@@ -57,6 +74,31 @@ fn main() {
         _ => {
             eprintln!("The provided table: {table} is not supported");
             std::process::exit(1);
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::{read_and_print_table, TABLES};
+
+    // In order to run the tests, you need to have the data folder in the root of the project
+    // or at least you need a symbolic link called "data" pointing to the folder where the data is stored
+
+    #[test]
+    fn it_works() {
+        let path = std::path::Path::new("data");
+
+        if path.exists() {
+            for table in TABLES {
+                if table == "ad_targeting" {
+                    continue;
+                }
+                if table == "search_queries" {
+                    continue;
+                }
+                read_and_print_table(table, path);
+            }
         }
     }
 }

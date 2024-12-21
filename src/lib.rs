@@ -205,6 +205,9 @@ pub struct Message {
 
     #[serde(rename = "IS MESSAGE DRAFT")]
     pub is_message_draft: String,
+
+    #[serde(rename = "IS CONVERSATION DRAFT")]
+    pub is_conversation_draft: String,
 }
 
 #[derive(Deserialize, Debug)]
@@ -361,18 +364,51 @@ macro_rules! read_file {
 
 read_file!(read_ads_clicked_file, AdsClicked, "Ads Clicked.csv");
 read_file!(read_ad_targeting_file, AdTargeting, "Ad_Targeting.csv");
+// TODO: Articles
+// coach_messages.csv
+// Comments.csv
+// Company Follows.csv
+// Connections.csv (See below)
 read_file!(read_contacts_file, Contact, "Contacts.csv");
-read_file!(read_skills_file, Skill, "Skills.csv");
-read_file!(read_shares_file, Share, "Shares.csv");
+// Education.csv
+// Email Addresses.csv
+// Endorsement_Given_Info.csv
+// Endorsement_Received_Info.csv
+// Events.csv
+// Hashtag_Follows.csv
+// InstantReosts.csv
 read_file!(read_invitations_file, Invitation, "Invitations.csv");
+// Jobs/
+// Languages.csv
+// learning_coach_messages.csv
+// Learning.csv
+// learning_role_play_messages.csv
+// Logins.csv
+// Member_Follows.csv
+// Member Hashtags.csv
 read_file!(read_messages_file, Message, "messages.csv");
-read_file!(read_votes_file, Vote, "Votes.csv");
-read_file!(read_saved_items_file, SavedItems, "Saved_Items.csv");
+// PhoneNumbers.csv
+// Positions.csv
+// Profile.csv
+// Profile Summary.csv
+// Reactions.csv
+// Receipts.csv
+// Recommendations_Given.csv
 read_file!(
     read_recommendations_received_file,
     RecommendationsReceived,
     "Recommendations_Received.csv"
 );
+// Registration.csv
+// Rich_Media.csv
+read_file!(read_saved_items_file, SavedItems, "Saved_Items.csv");
+// SearchQueries.csv  (see below)
+// Services Marketplace/
+read_file!(read_shares_file, Share, "Shares.csv");
+read_file!(read_skills_file, Skill, "Skills.csv");
+// Verifications/
+read_file!(read_votes_file, Vote, "Votes.csv");
+// Whatsapp Phone Numbers.csv
 
 pub fn read_connections_file(path: &Path) -> Result<Vec<Connection>, Box<dyn Error>> {
     let filepath = path.join("Connections.csv");
