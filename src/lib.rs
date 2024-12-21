@@ -19,6 +19,97 @@ pub struct AdsClicked {
 #[derive(Deserialize, Debug)]
 #[serde(deny_unknown_fields)]
 #[allow(dead_code)]
+pub struct AdTargeting {
+    #[serde(rename = "Member Age")]
+    pub member_age: String,
+
+    #[serde(rename = "Buyer Groups")]
+    pub buyer_groups: String,
+
+    // TODO: It seems this file has 3 columns with the same title. "Company Names"
+    #[serde(rename = "Company Names")]
+    pub company_names: String,
+
+    #[serde(rename = "Company Follower of")]
+    pub company_follower_of: String,
+
+    #[serde(rename = "Company Category")]
+    pub company_category: String,
+
+    #[serde(rename = "Company Size")]
+    pub company_size: String,
+
+    #[serde(rename = "Degrees")]
+    pub degrees: String,
+
+    #[serde(rename = "degreeClass")]
+    pub degree_class: String,
+
+    #[serde(rename = "Member Schools")]
+    pub member_schools: String,
+
+    #[serde(rename = "Company Growth Rate")]
+    pub company_growth_rate: String,
+
+    #[serde(rename = "Fields of Study")]
+    pub fields_of_study: String,
+
+    #[serde(rename = "Company Connections")]
+    pub company_connections: String,
+
+    #[serde(rename = "Function By Size")]
+    pub function_by_size: String,
+
+    #[serde(rename = "Job Functions")]
+    pub job_functions: String,
+
+    #[serde(rename = "Member Gender")]
+    pub member_gender: String,
+
+    #[serde(rename = "Graduation Year")]
+    pub graduation_year: String,
+
+    #[serde(rename = "Member Groups")]
+    pub member_groups: String,
+
+    #[serde(rename = "Company Industries")]
+    pub company_industries: String,
+
+    #[serde(rename = "Member Interests")]
+    pub member_interests: String,
+
+    #[serde(rename = "Interface Locales")]
+    pub interface_locales: String,
+
+    #[serde(rename = "interfaceLocale")]
+    pub interface_locale: String,
+
+    #[serde(rename = "Member Traits")]
+    pub member_traits: String,
+
+    #[serde(rename = "Profile Locations")]
+    pub profile_locations: String,
+
+    #[serde(rename = "Company Revenue")]
+    pub company_revenue: String,
+
+    #[serde(rename = "Job Seniorities")]
+    pub job_seniorities: String,
+
+    #[serde(rename = "Member Skills")]
+    pub member_skills: String,
+
+    // We have 3 columns titles "Job Titles"
+    #[serde(rename = "Job Titles")]
+    pub job_titles: String,
+
+    #[serde(rename = "Years of Experience")]
+    pub years_of_experience: String,
+}
+
+#[derive(Deserialize, Debug)]
+#[serde(deny_unknown_fields)]
+#[allow(dead_code)]
 pub struct RecommendationsReceived {
     #[serde(rename = "First Name")]
     pub first_name: String,
@@ -269,6 +360,7 @@ macro_rules! read_file {
 }
 
 read_file!(read_ads_clicked_file, AdsClicked, "Ads Clicked.csv");
+read_file!(read_ad_targeting_file, AdTargeting, "Ad_Targeting.csv");
 read_file!(read_contacts_file, Contact, "Contacts.csv");
 read_file!(read_skills_file, Skill, "Skills.csv");
 read_file!(read_shares_file, Share, "Shares.csv");
