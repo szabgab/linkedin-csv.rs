@@ -1,7 +1,7 @@
 use linkedin_csv::{
-    read_connections_file, read_contacts_file, read_invitations_file, read_messages_file,
-    read_recommendations_received_file, read_saved_items_file, read_search_queries_file,
-    read_shares_file, read_skills_file, read_votes_file,
+    read_ads_clicked_file, read_connections_file, read_contacts_file, read_invitations_file,
+    read_messages_file, read_recommendations_received_file, read_saved_items_file,
+    read_search_queries_file, read_shares_file, read_skills_file, read_votes_file,
 };
 
 macro_rules! call_function {
@@ -24,7 +24,7 @@ fn main() {
     let args = std::env::args().collect::<Vec<String>>();
     if args.len() != 3 {
         eprintln!(
-            "Usage: {} [connections|contacts|invitations|messages|search_queries|shares|skills|votes] PATH_TO_LINKEDIN_FOLDER",
+            "Usage: {} [ads_clicked, connections|contacts|invitations|messages|search_queries|shares|skills|votes] PATH_TO_LINKEDIN_FOLDER",
             args[0]
         );
         std::process::exit(1);
@@ -37,6 +37,7 @@ fn main() {
     }
 
     match table.as_str() {
+        "ads_clicked" => call_function!(read_ads_clicked_file, path, "Ads Clicked.csv"),
         "connections" => call_function!(read_connections_file, path, "Connections.csv"),
         "contacts" => call_function!(read_contacts_file, path, "Contacts.csv"),
         "invitations" => call_function!(read_invitations_file, path, "Invitations.csv"),

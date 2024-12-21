@@ -8,6 +8,17 @@ use serde::Deserialize;
 #[derive(Deserialize, Debug)]
 #[serde(deny_unknown_fields)]
 #[allow(dead_code)]
+pub struct AdsClicked {
+    #[serde(rename = "Ad clicked Date")]
+    pub ad_clicked_date: String,
+
+    #[serde(rename = "Ad Title/Id")]
+    pub ad_title_id: String,
+}
+
+#[derive(Deserialize, Debug)]
+#[serde(deny_unknown_fields)]
+#[allow(dead_code)]
 pub struct RecommendationsReceived {
     #[serde(rename = "First Name")]
     pub first_name: String,
@@ -257,6 +268,7 @@ macro_rules! read_file {
     };
 }
 
+read_file!(read_ads_clicked_file, AdsClicked, "Ads Clicked.csv");
 read_file!(read_contacts_file, Contact, "Contacts.csv");
 read_file!(read_skills_file, Skill, "Skills.csv");
 read_file!(read_shares_file, Share, "Shares.csv");
